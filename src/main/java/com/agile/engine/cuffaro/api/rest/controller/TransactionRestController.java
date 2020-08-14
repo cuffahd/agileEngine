@@ -45,13 +45,13 @@ public class TransactionRestController {
 	 * @return Transaction information for the given transactionId
 	 */
 	@RequestMapping(method = RequestMethod.GET, value="/api/transactions",  params = "transactionId")
-	public  ResponseEntity<String> findTransaction(@RequestParam("transactionId") String transactionId){
+	public  ResponseEntity<Object> findTransaction(@RequestParam("transactionId") String transactionId){
 		
 		try {
 			TransactionDTO dto = transactionService.getTransaction(transactionId);
-			return ResponseEntity.ok(dto.toJson());
+			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} catch (InvalidArgumentException e) {
-			return ResponseEntity.status(HttpStatus.GONE).body("invalid ID supplied");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid ID supplied");
 		}catch(TransactionNotFoundException  e) {
 			return ResponseEntity.status(HttpStatus.GONE).body("transaction not found");
 		}
@@ -65,10 +65,10 @@ public class TransactionRestController {
 	 * @return 
 	 */
 	@RequestMapping(method = RequestMethod.POST, value ="/api/transactions", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> createTransaction(@RequestBody TransactionRequestDTO transactionRequest){
+	public ResponseEntity<Object> createTransaction(@RequestBody TransactionRequestDTO transactionRequest){
 		try {
 			transactionService.createTransaction(transactionRequest);
-			return ResponseEntity.ok("transaction stored");
+			return new ResponseEntity<>("transaction stored", HttpStatus.CREATED);
 		} catch (InvalidOperationException e) {
 			return ResponseEntity.status(422).body("invalid input");
 		}

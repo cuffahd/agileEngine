@@ -75,14 +75,4 @@ public class TransactionDTO implements Serializable{
 		this.effectiveDate = effectiveDate;
 	}
 
-
-	public String toJson() {
-		return "{\n" + 
-				"        \"transactionId\": \""+transactionId + "\",\r\n" + 
-				"        \"transactionType\": \"" + transactionType + "\",\r\n" + 
-				"        \"amount\": " + amount + ",\r\n" + 
-				"        \"effectiveDate\": \""+effectiveDate+"\"\r\n" + 
-				"    }";
-				
-	}
 }
