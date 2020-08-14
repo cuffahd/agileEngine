@@ -3,7 +3,6 @@ package com.agile.engine.cuffaro.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,11 @@ import com.agile.engine.cuffaro.exceptions.TransactionNotFoundException;
 import com.agile.engine.cuffaro.model.AccountBalance;
 import com.agile.engine.cuffaro.model.TransactionItem;
 
+/**
+ * Transaction Service
+ * @author hcuff
+ *
+ */
 @Service
 public class TransactionService implements ITransactionService {
 
@@ -31,6 +35,9 @@ public class TransactionService implements ITransactionService {
 	@Autowired
 	private IAccountBalanceDAO accountBalanceDAO;
 	
+	/**
+	 * Retrieves all the transaction history.
+	 */
 	@Override
 	public List<TransactionDTO> getTransactionHistory() {
 		List<TransactionItem> items = transactionDAO.findAll();
@@ -41,6 +48,9 @@ public class TransactionService implements ITransactionService {
 		return transactionDTOList;
 	}
 
+	/**
+	 * Retrieves a specific transaction.
+	 */
 	@Override
 	public TransactionDTO getTransaction(String transactionId) throws InvalidArgumentException, TransactionNotFoundException {
 		validateUUID(transactionId);
@@ -60,11 +70,15 @@ public class TransactionService implements ITransactionService {
 		}		
 	}
 
+	/**
+	 * Creates a new transaction and updates the account balance.
+	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
 	public TransactionDTO createTransaction(TransactionRequestDTO transactionRequestDTO) throws InvalidOperationException {
 		AccountBalance balance;
 		Optional<AccountBalance> optionalBalance = accountBalanceDAO.findById(1L);
+		//TODO: if we manage more than 1 account, please remove the hardcoded value.
 		if(optionalBalance.isPresent()) {
 			balance = optionalBalance.get();
 		}else {

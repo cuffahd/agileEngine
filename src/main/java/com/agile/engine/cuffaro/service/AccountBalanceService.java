@@ -9,15 +9,25 @@ import com.agile.engine.cuffaro.dao.IAccountBalanceDAO;
 import com.agile.engine.cuffaro.dto.AccountBalanceDTO;
 import com.agile.engine.cuffaro.model.AccountBalance;
 
+/**
+ * Account Balance Service
+ * @author hcuff
+ *
+ */
 @Service
 public class AccountBalanceService implements IAccountBalanceService{
 
 	@Autowired
 	private IAccountBalanceDAO accountBalanceDAO;
 	
+	/**
+	 * Retrieves the account balance.
+	 * If there is no account balance return empty dto.
+	 */
 	@Override
 	public AccountBalanceDTO getAccountBalance() {
 		Optional<AccountBalance> accountOptional = accountBalanceDAO.findById(1L);
+		//TODO: If we have more than 1 accounts remove this hardcoded 1, and add the ID as method parameter
 		if(accountOptional.isPresent()) {
 			return new AccountBalanceDTO(accountOptional.get());
 		}else {

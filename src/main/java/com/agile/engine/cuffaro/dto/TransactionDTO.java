@@ -2,7 +2,6 @@ package com.agile.engine.cuffaro.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 import com.agile.engine.cuffaro.enums.TransactionTypeEnum;
 import com.agile.engine.cuffaro.model.TransactionItem;
