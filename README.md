@@ -18,3 +18,4 @@ TODO / Pending:
 Improve UUID Validation.
 Add Validations.
 Add JUnit testing.
+JAVA docs.
