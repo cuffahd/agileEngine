@@ -8,7 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
+/**
+ * Account balance Entity
+ * @author hcuff
+ *
+ */
 @Entity
 public class AccountBalance implements Serializable{
 
@@ -17,9 +21,14 @@ public class AccountBalance implements Serializable{
 	 */
 	private static final long serialVersionUID = -7013442732635173622L;
 
+	/**
+	 * Account ID. Now if hardcoded to 1 because we only manage one user.
+	 * 
+	 */
 	@Id
 	@Column(nullable = false)
 	private Long accountId = 1L; 
+	//TODO: If we will manage more accounts, remove this hardcoded value.
 	
 	@Column(nullable = false)
 	private Double amount;

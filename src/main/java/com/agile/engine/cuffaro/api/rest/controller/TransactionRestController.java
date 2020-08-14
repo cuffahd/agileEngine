@@ -19,17 +19,31 @@ import com.agile.engine.cuffaro.exceptions.InvalidOperationException;
 import com.agile.engine.cuffaro.exceptions.TransactionNotFoundException;
 import com.agile.engine.cuffaro.service.ITransactionService;
 
+/**
+ * Controller that manages transactions.
+ * @author hcuff
+ *
+ */
 @RestController
 public class TransactionRestController {
 
 	@Autowired
 	private ITransactionService transactionService;
 	
+	/**
+	 * Retrieves a list with all the transactions stored.
+	 * @return ResponseEntity<List<TransactionDTO>> - represents a list with all the transactions.
+	 */
 	@RequestMapping(value="/api/transactions", method = RequestMethod.GET)
 	public ResponseEntity<List<TransactionDTO>> getTransactionHistory(){
 		return ResponseEntity.ok(transactionService.getTransactionHistory());
 	}
 	
+	/**
+	 * Retrieves the transaction identified with the param provided.
+	 * @param transactionId
+	 * @return Transaction information for the given transactionId
+	 */
 	@RequestMapping(method = RequestMethod.GET, value="/api/transactions",  params = "transactionId")
 	public  ResponseEntity<String> findTransaction(@RequestParam("transactionId") String transactionId){
 		
@@ -45,6 +59,11 @@ public class TransactionRestController {
 
 	}
 	
+	/**
+	 * Creates new transactions.
+	 * @param transactionRequest
+	 * @return 
+	 */
 	@RequestMapping(method = RequestMethod.POST, value ="/api/transactions", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createTransaction(@RequestBody TransactionRequestDTO transactionRequest){
 		try {

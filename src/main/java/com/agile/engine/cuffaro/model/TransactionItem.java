@@ -2,7 +2,6 @@ package com.agile.engine.cuffaro.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +17,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.agile.engine.cuffaro.enums.TransactionTypeEnum;
 
+/**
+ * Transaction Item Entity
+ * @author hcuff
+ *
+ */
 @Entity
 public class TransactionItem implements Serializable{
 
@@ -34,7 +38,12 @@ public class TransactionItem implements Serializable{
 	@GeneratedValue (generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
 	private String transactionId;
+	//TODO: Change String to UUID as PK
 	
+	/**
+	 * Transaction Type, 
+	 * "debit or credit"
+	 */
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private TransactionTypeEnum transactionType;
