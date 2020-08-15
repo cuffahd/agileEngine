@@ -2,6 +2,8 @@ package com.agile.engine.cuffaro.api.rest.controller;
 
 import java.util.List;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +29,8 @@ import com.agile.engine.cuffaro.service.ITransactionService;
 @RestController
 public class TransactionRestController {
 
+	private static final Logger logger = LogManager.getLogger(TransactionRestController.class);
+	
 	@Autowired
 	private ITransactionService transactionService;
 	
@@ -36,6 +40,7 @@ public class TransactionRestController {
 	 */
 	@RequestMapping(value="/api/transactions", method = RequestMethod.GET)
 	public ResponseEntity<List<TransactionDTO>> getTransactionHistory(){
+		logger.info("Transaction history requested.");
 		return ResponseEntity.ok(transactionService.getTransactionHistory());
 	}
 	
@@ -46,7 +51,7 @@ public class TransactionRestController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value="/api/transactions",  params = "transactionId")
 	public  ResponseEntity<Object> findTransaction(@RequestParam("transactionId") String transactionId){
-		
+		logger.info("Transaction request - TransactionId: " + transactionId);
 		try {
 			TransactionDTO dto = transactionService.getTransaction(transactionId);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -55,8 +60,6 @@ public class TransactionRestController {
 		}catch(TransactionNotFoundException  e) {
 			return ResponseEntity.status(HttpStatus.GONE).body("transaction not found");
 		}
-		
-
 	}
 	
 	/**
@@ -66,6 +69,7 @@ public class TransactionRestController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value ="/api/transactions", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> createTransaction(@RequestBody TransactionRequestDTO transactionRequest){
+		logger.info("Processing new transaction request");
 		try {
 			transactionService.createTransaction(transactionRequest);
 			return new ResponseEntity<>("transaction stored", HttpStatus.CREATED);

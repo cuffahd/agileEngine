@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -29,6 +31,8 @@ import com.agile.engine.cuffaro.model.TransactionItem;
 @Service
 public class TransactionService implements ITransactionService {
 
+	private static final Logger logger = LogManager.getLogger(TransactionService.class);
+	
 	@Autowired
 	private ITransactionDAO transactionDAO;
 	
@@ -40,6 +44,7 @@ public class TransactionService implements ITransactionService {
 	 */
 	@Override
 	public List<TransactionDTO> getTransactionHistory() {
+		logger.debug("Retrieving transaction history");
 		List<TransactionItem> items = transactionDAO.findAll();
 		List<TransactionDTO> transactionDTOList = new ArrayList<>();
 		for (TransactionItem item : items) {
@@ -53,20 +58,22 @@ public class TransactionService implements ITransactionService {
 	 */
 	@Override
 	public TransactionDTO getTransaction(String transactionId) throws InvalidArgumentException, TransactionNotFoundException {
+		logger.debug("Looking for transaction id: " + transactionId);
 		validateUUID(transactionId);
+		
 		
 		Optional<TransactionItem> item = transactionDAO.findById(transactionId);
 		if(item.isPresent()) {
 			return new TransactionDTO(item.get());
 		} else {
-			throw new TransactionNotFoundException();
+			throw new TransactionNotFoundException("Transaction not found - TransactionId: " + transactionId);
 		}
 	}
 
 	private void validateUUID(String transactionId) throws InvalidArgumentException {
 		//TODO: Improve UUID validation
 		if(transactionId.length()!=32) {
-			throw new InvalidArgumentException();			
+			throw new InvalidArgumentException("There was an error trying to parse UUID : " + transactionId);			
 		}		
 	}
 
@@ -76,6 +83,7 @@ public class TransactionService implements ITransactionService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
 	public TransactionDTO createTransaction(TransactionRequestDTO transactionRequestDTO) throws InvalidOperationException {
+		logger.debug("Processing transaction request");
 		AccountBalance balance;
 		Optional<AccountBalance> optionalBalance = accountBalanceDAO.findById(1L);
 		//TODO: if we manage more than 1 account, please remove the hardcoded value.
@@ -88,8 +96,8 @@ public class TransactionService implements ITransactionService {
 		if(TransactionTypeEnum.debit.equals(transactionRequestDTO.getType())) {
 			balance.reduceAmount(transactionRequestDTO.getAmount());
 			if(balance.getAmount() < Double.valueOf(0)) {
-				throw new InvalidOperationException();
-				//TODO: Log exception
+				throw new InvalidOperationException("Operation result is negative. - Operation: " + transactionRequestDTO.getType() 
+					+ " amount: " + transactionRequestDTO.getAmount());
 			}
 		}else {
 			balance.increaseAmount(transactionRequestDTO.getAmount());
