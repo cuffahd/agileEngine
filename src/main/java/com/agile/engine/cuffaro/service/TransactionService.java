@@ -82,7 +82,7 @@ public class TransactionService implements ITransactionService {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
-	public TransactionDTO createTransaction(TransactionRequestDTO transactionRequestDTO) throws InvalidOperationException {
+	public synchronized TransactionDTO createTransaction(TransactionRequestDTO transactionRequestDTO) throws InvalidOperationException {
 		logger.debug("Processing transaction request");
 		AccountBalance balance;
 		Optional<AccountBalance> optionalBalance = accountBalanceDAO.findById(1L);
