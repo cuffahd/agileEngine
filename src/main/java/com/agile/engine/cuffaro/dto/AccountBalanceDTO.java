@@ -39,6 +39,44 @@ public class AccountBalanceDTO implements Serializable{
 	public void setEffectiveDate(Date effectiveDate) {
 		this.effectiveDate = effectiveDate;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+		result = prime * result + ((effectiveDate == null) ? 0 : effectiveDate.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		AccountBalanceDTO other = (AccountBalanceDTO) obj;
+		if (amount == null) {
+			if (other.amount != null) {
+				return false;
+			}
+		} else if (!amount.equals(other.amount)) {
+			return false;
+		}
+		if (effectiveDate == null) {
+			if (other.effectiveDate != null) {
+				return false;
+			}
+		} else if (!effectiveDate.equals(other.effectiveDate)) {
+			return false;
+		}
+		return true;
+	}
 	
 
 }

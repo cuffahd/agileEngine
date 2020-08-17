@@ -61,7 +61,6 @@ public class TransactionService implements ITransactionService {
 		logger.debug("Looking for transaction id: " + transactionId);
 		validateUUID(transactionId);
 		
-		
 		Optional<TransactionItem> item = transactionDAO.findById(transactionId);
 		if(item.isPresent()) {
 			return new TransactionDTO(item.get());
