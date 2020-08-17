@@ -15,11 +15,6 @@ public class TransactionRequestDTO implements Serializable{
 	private TransactionTypeEnum type;
 	private Double amount;
 	
-	@Override
-	public String toString() {
-		return "TransactionRequestDTO [type=" + type + ", amount=" + amount + "]";
-	}
-
 	public TransactionRequestDTO() {
 		//Default constructor without parameters
 	}
@@ -51,6 +46,10 @@ public class TransactionRequestDTO implements Serializable{
 		return result;
 	}
 
+	public TransactionItem toTransaction() {
+		return new TransactionItem(this.type, this.amount);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -76,9 +75,8 @@ public class TransactionRequestDTO implements Serializable{
 		return true;
 	}
 
-	public TransactionItem toTransaction() {
-		return new TransactionItem(this.type, this.amount);
+	@Override
+	public String toString() {
+		return "TransactionRequestDTO [type=" + type + ", amount=" + amount + "]";
 	}
-	
-	
 }

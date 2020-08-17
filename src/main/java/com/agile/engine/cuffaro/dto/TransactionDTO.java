@@ -6,7 +6,7 @@ import java.util.Date;
 import com.agile.engine.cuffaro.enums.TransactionTypeEnum;
 import com.agile.engine.cuffaro.model.TransactionItem;
 
-public class TransactionDTO implements Serializable{
+public class TransactionDTO implements Serializable {
 	
 	/**
 	 * 
@@ -98,6 +98,16 @@ public class TransactionDTO implements Serializable{
 			return false;
 		}
 		TransactionDTO other = (TransactionDTO) obj;
+		if (transactionId == null) {
+			if (other.transactionId != null) {
+				return false;
+			}
+		} else if (!transactionId.equals(other.transactionId)) {
+			return false;
+		}
+		if (transactionType != other.transactionType) {
+			return false;
+		}
 		if (amount == null) {
 			if (other.amount != null) {
 				return false;
@@ -110,16 +120,6 @@ public class TransactionDTO implements Serializable{
 				return false;
 			}
 		} else if (!effectiveDate.equals(other.effectiveDate)) {
-			return false;
-		}
-		if (transactionId == null) {
-			if (other.transactionId != null) {
-				return false;
-			}
-		} else if (!transactionId.equals(other.transactionId)) {
-			return false;
-		}
-		if (transactionType != other.transactionType) {
 			return false;
 		}
 		return true;
