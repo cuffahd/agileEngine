@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.agile.engine.cuffaro.dao.IAccountBalanceDAO;
 import com.agile.engine.cuffaro.dto.AccountBalanceDTO;
@@ -29,6 +30,7 @@ public class AccountBalanceService implements IAccountBalanceService{
 	 * If there is no account balance return empty dto.
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public AccountBalanceDTO getAccountBalance() {
 		Optional<AccountBalance> accountOptional = accountBalanceDAO.findById(1L);
 		//TODO: If we have more than 1 accounts remove this hardcoded 1, and add the ID as method parameter

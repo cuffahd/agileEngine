@@ -25,7 +25,7 @@ public class TransactionDebitDTO extends TransactionDTO implements OperationStra
 	}
 
 	@Override
-	public BigDecimal doOperation(BigDecimal otherValue) {
+	public synchronized BigDecimal doOperation(BigDecimal otherValue) {
 		return otherValue.subtract(this.getAmount());
 	}
 

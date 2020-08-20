@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 /**
  * Account balance Entity
  * @author hcuff
@@ -41,6 +42,9 @@ public class AccountBalance implements Serializable{
 	@Column(nullable = false)
 	private Date effectiveDate;
 
+	@Version
+    private Long version;
+	
 	public AccountBalance() {}
 	public AccountBalance(Long accountId, BigDecimal amount) {
 		this.accountId = accountId;
@@ -79,6 +83,12 @@ public class AccountBalance implements Serializable{
 	public void increaseAmount(BigDecimal otherAmount) {
 		this.amount = this.amount.add(otherAmount);
 		
+	}
+	public Long getVersion() {
+		return version;
+	}
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 	
 }

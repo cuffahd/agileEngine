@@ -25,7 +25,7 @@ public class TransactionCreditDTO  extends TransactionDTO implements OperationSt
 	}
 
 	@Override
-	public BigDecimal doOperation(BigDecimal otherValue) {
+	public synchronized BigDecimal doOperation(BigDecimal otherValue) {
 		return this.getAmount().add(otherValue);
 		
 	}

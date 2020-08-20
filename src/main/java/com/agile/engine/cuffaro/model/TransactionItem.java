@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -62,6 +63,9 @@ public class TransactionItem implements Serializable{
 	@Column(nullable = false)
 	private Date effectiveDate;
 
+	@Version
+    private Long version;
+	
 	@PrePersist
 	void effectiveDate() {
 		this.effectiveDate= new Date();
@@ -160,5 +164,13 @@ public class TransactionItem implements Serializable{
 	public String toString() {
 		return "TransactionItem [transactionId=" + transactionId + ", transactionType=" + transactionType + ", amount="
 				+ amount + ", effectiveDate=" + effectiveDate + "]";
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 }

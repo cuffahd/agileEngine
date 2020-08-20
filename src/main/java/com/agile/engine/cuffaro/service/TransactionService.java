@@ -49,6 +49,7 @@ public class TransactionService implements ITransactionService {
 	 * @throws InvalidArgumentException 
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<TransactionDTO> getTransactionHistory() throws InvalidArgumentException {
 		logger.debug("Retrieving transaction history");
 		List<TransactionItem> items = transactionDAO.findAll();
@@ -63,6 +64,7 @@ public class TransactionService implements ITransactionService {
 	 * Retrieves a specific transaction.
 	 */
 	@Override
+	@Transactional(readOnly = true, isolation = Isolation.SERIALIZABLE)
 	public TransactionDTO getTransaction(String transactionId) throws InvalidArgumentException, TransactionNotFoundException {
 		logger.debug("Looking for transaction id: " + transactionId);
 		validateUUID(transactionId);
