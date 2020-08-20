@@ -4,6 +4,7 @@ package com.agile.engine.cuffaro.api.rest.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.junit.Assert;
@@ -56,7 +57,7 @@ public class AccountBalanceRestControllerTest {
     @Test
     public void test_return_not_empty_balance() throws Exception {
     	AccountBalanceDTO dtoToReturn = new AccountBalanceDTO();
-    	dtoToReturn.setAmount(Double.valueOf(100));
+    	dtoToReturn.setAmount(new BigDecimal(100));
     	dtoToReturn.setEffectiveDate(new Date(1500000));
     	
     	
@@ -65,6 +66,6 @@ public class AccountBalanceRestControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn().getResponse().getContentAsString();
  
-        Assert.assertEquals("{\"amount\":100.0,\"effectiveDate\":\"1970-01-01T00:25:00.000+00:00\"}", response);
+        Assert.assertEquals("{\"amount\":100,\"effectiveDate\":\"1970-01-01T00:25:00.000+00:00\"}", response);
     }
 }

@@ -1,6 +1,7 @@
 package com.agile.engine.cuffaro.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.agile.engine.cuffaro.enums.TransactionTypeEnum;
 import com.agile.engine.cuffaro.model.TransactionItem;
@@ -13,13 +14,13 @@ public class TransactionRequestDTO implements Serializable{
 	private static final long serialVersionUID = -1582514313584568885L;
 	
 	private TransactionTypeEnum type;
-	private Double amount;
+	private BigDecimal amount;
 	
 	public TransactionRequestDTO() {
 		//Default constructor without parameters
 	}
 	
-	public TransactionRequestDTO(TransactionTypeEnum type, Double amount) {
+	public TransactionRequestDTO(TransactionTypeEnum type, BigDecimal amount) {
 		this.type = type;
 		this.amount = amount;
 	}
@@ -30,10 +31,10 @@ public class TransactionRequestDTO implements Serializable{
 	public void setType(TransactionTypeEnum type) {
 		this.type = type;
 	}
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
@@ -41,7 +42,7 @@ public class TransactionRequestDTO implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+		result = prime * result + ((amount == null) ? 0 : amount.toString().hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}

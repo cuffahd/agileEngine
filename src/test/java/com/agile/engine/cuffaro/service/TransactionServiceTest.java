@@ -1,5 +1,6 @@
 package com.agile.engine.cuffaro.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,7 @@ public class TransactionServiceTest {
 	public void init() {
 	    MockitoAnnotations.initMocks(this);
 	    item = new TransactionItem();
-		item.setAmount(Double.valueOf(10));
+		item.setAmount(new BigDecimal(10));
 		item.setEffectiveDate(new Date(1500000));
 		item.setTransactionId("4028ab3e73ede71e0173ede743680001");
 		item.setTransactionType(TransactionTypeEnum.credit);
@@ -96,7 +97,7 @@ public class TransactionServiceTest {
 		Mockito.when(transactionDAO.findById(Mockito.anyString())).thenReturn(Optional.empty());
 		
 		TransactionRequestDTO dto = new TransactionRequestDTO();
-		dto.setAmount(Double.valueOf(10));
+		dto.setAmount(new BigDecimal(10));
 		dto.setType(TransactionTypeEnum.debit);
 				
 		transactionService.createTransaction(dto);
@@ -107,11 +108,11 @@ public class TransactionServiceTest {
 	public void test_createTransaction() throws InvalidOperationException{
 		AccountBalance balance = new AccountBalance();
 		balance.setAccountId(1L);
-		balance.setAmount(Double.valueOf(100));
+		balance.setAmount(new BigDecimal(100));
 		balance.setEffectiveDate(new Date(170));
 		
 		TransactionRequestDTO dto = new TransactionRequestDTO();
-		dto.setAmount(Double.valueOf(10));
+		dto.setAmount(new BigDecimal(10));
 		dto.setType(TransactionTypeEnum.debit);
 
 		TransactionItem item = new TransactionItem();

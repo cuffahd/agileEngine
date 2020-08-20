@@ -1,5 +1,6 @@
 package com.agile.engine.cuffaro.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -89,12 +90,12 @@ public class TransactionService implements ITransactionService {
 		if(optionalBalance.isPresent()) {
 			balance = optionalBalance.get();
 		}else {
-			balance = new AccountBalance(1L, Double.valueOf(0));
+			balance = new AccountBalance(1L, new BigDecimal(0));
 			
 		}
 		if(TransactionTypeEnum.debit.equals(transactionRequestDTO.getType())) {
 			balance.reduceAmount(transactionRequestDTO.getAmount());
-			if(balance.getAmount() < Double.valueOf(0)) {
+			if(balance.getAmount().compareTo(new BigDecimal(0)) == -1) {
 				throw new InvalidOperationException("Operation result is negative. - Operation: " + transactionRequestDTO.getType() 
 					+ " amount: " + transactionRequestDTO.getAmount());
 			}
