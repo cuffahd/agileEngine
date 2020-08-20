@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.agile.engine.cuffaro.dto.operations.TransactionDebitDTO;
-import com.agile.engine.cuffaro.enums.TransactionTypeEnum;
-import com.agile.engine.cuffaro.model.TransactionItem;
 
 public class TransactionDTOTest {
 
