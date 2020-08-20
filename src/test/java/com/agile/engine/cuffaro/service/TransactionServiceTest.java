@@ -24,6 +24,7 @@ import com.agile.engine.cuffaro.exceptions.InvalidOperationException;
 import com.agile.engine.cuffaro.exceptions.TransactionNotFoundException;
 import com.agile.engine.cuffaro.model.AccountBalance;
 import com.agile.engine.cuffaro.model.TransactionItem;
+import com.agile.engine.cuffaro.model.strategies.TransactionFactory;
 
 public class TransactionServiceTest {
 
@@ -48,7 +49,7 @@ public class TransactionServiceTest {
 	}
 		
 	@Test
-	public void test_getTransactionHistory_emptyList() {
+	public void test_getTransactionHistory_emptyList() throws InvalidArgumentException {
 		Mockito.when(transactionDAO.findAll()).thenReturn(new ArrayList<TransactionItem>());
 		
 		List<TransactionDTO> listReturned = transactionService.getTransactionHistory();
@@ -56,7 +57,7 @@ public class TransactionServiceTest {
 	}
 	
 	@Test
-	public void test_getTransactionHistory_returnOneItem() {
+	public void test_getTransactionHistory_returnOneItem() throws InvalidArgumentException {
 		List<TransactionItem> transactionItemList = new ArrayList<TransactionItem>();
 		transactionItemList.add(item);
 		
@@ -65,7 +66,7 @@ public class TransactionServiceTest {
 		List<TransactionDTO> listReturned = transactionService.getTransactionHistory();
 		Assert.assertFalse(listReturned.isEmpty());
 		Assert.assertEquals(transactionItemList.size(), listReturned.size());
-		Assert.assertEquals(new TransactionDTO(item), listReturned.get(0));
+		Assert.assertEquals(TransactionFactory.createTransactionDTO(item), listReturned.get(0));
 
 	}
 	
@@ -93,7 +94,7 @@ public class TransactionServiceTest {
 	}	
 	
 	@Test(expected = InvalidOperationException.class)
-	public void test_createTransaction_throwsInvalidOperationException() throws InvalidOperationException{
+	public void test_createTransaction_throwsInvalidOperationException() throws InvalidOperationException, InvalidArgumentException{
 		Mockito.when(transactionDAO.findById(Mockito.anyString())).thenReturn(Optional.empty());
 		
 		TransactionRequestDTO dto = new TransactionRequestDTO();
@@ -105,7 +106,7 @@ public class TransactionServiceTest {
 	}
 	
 	@Test
-	public void test_createTransaction() throws InvalidOperationException{
+	public void test_createTransaction() throws InvalidOperationException, InvalidArgumentException{
 		AccountBalance balance = new AccountBalance();
 		balance.setAccountId(1L);
 		balance.setAmount(new BigDecimal(100));
@@ -122,9 +123,7 @@ public class TransactionServiceTest {
 				
 		TransactionDTO returnedDTO = transactionService.createTransaction(dto);
 		Assert.assertEquals(item.getTransactionId(), returnedDTO.getTransactionId());
-		Assert.assertEquals(item.getAmount(), returnedDTO.getAmount());
 		Assert.assertEquals(item.getEffectiveDate(), returnedDTO.getEffectiveDate());
-		Assert.assertEquals(item.getTransactionType(), returnedDTO.getTransactionType());
 		
 	}
 }

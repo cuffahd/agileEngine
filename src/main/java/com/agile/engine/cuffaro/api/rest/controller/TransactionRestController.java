@@ -1,7 +1,5 @@
 package com.agile.engine.cuffaro.api.rest.controller;
 
-import java.util.List;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,7 @@ public class TransactionRestController {
 	public TransactionRestController(ITransactionService transactionService) {
 		this.transactionService = transactionService;
 	}
+	
 	private final ITransactionService transactionService;
 	
 	/**
@@ -42,9 +41,13 @@ public class TransactionRestController {
 	 * @return ResponseEntity<List<TransactionDTO>> - represents a list with all the transactions.
 	 */
 	@RequestMapping(value="/api/transactions", method = RequestMethod.GET)
-	public ResponseEntity<List<TransactionDTO>> getTransactionHistory(){
+	public ResponseEntity<Object> getTransactionHistory(){
 		logger.info("Transaction history requested.");
-		return ResponseEntity.ok(transactionService.getTransactionHistory());
+		try {
+			return ResponseEntity.ok(transactionService.getTransactionHistory());
+		} catch (InvalidArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: Invalid operation type.");
+		}
 	}
 	
 	/**
@@ -78,6 +81,8 @@ public class TransactionRestController {
 			return new ResponseEntity<>("transaction stored", HttpStatus.CREATED);
 		} catch (InvalidOperationException e) {
 			return ResponseEntity.status(422).body("invalid input");
+		} catch (InvalidArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: Invalid operation type.");
 		}
 	}
 	

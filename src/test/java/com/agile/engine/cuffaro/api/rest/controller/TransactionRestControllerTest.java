@@ -30,6 +30,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.agile.engine.cuffaro.CuffaroApplication;
 import com.agile.engine.cuffaro.dto.TransactionDTO;
 import com.agile.engine.cuffaro.dto.TransactionRequestDTO;
+import com.agile.engine.cuffaro.dto.operations.TransactionCreditDTO;
+import com.agile.engine.cuffaro.dto.operations.TransactionDebitDTO;
 import com.agile.engine.cuffaro.enums.TransactionTypeEnum;
 import com.agile.engine.cuffaro.exceptions.InvalidArgumentException;
 import com.agile.engine.cuffaro.exceptions.InvalidOperationException;
@@ -61,8 +63,8 @@ public class TransactionRestControllerTest {
     
     @Before
     public void setup() {
-    	transDto1 = new TransactionDTO("4028808f73ea5a160173ea5a53fd0001", TransactionTypeEnum.credit, new BigDecimal(10), new Date(1500000));
-    	transDto2 = new TransactionDTO("4028808f73ea5a160173ea5a53fd0002", TransactionTypeEnum.debit, new BigDecimal(11), new Date(15000000));
+    	transDto1 = new TransactionCreditDTO("4028808f73ea5a160173ea5a53fd0001", new BigDecimal(10), new Date(1500000));
+    	transDto2 = new TransactionDebitDTO("4028808f73ea5a160173ea5a53fd0002", new BigDecimal(11), new Date(15000000));
     }
     
     @Test
@@ -85,8 +87,8 @@ public class TransactionRestControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn().getResponse().getContentAsString();
  
-        Assert.assertEquals("[{\"transactionId\":\"4028808f73ea5a160173ea5a53fd0001\",\"transactionType\":\"credit\",\"amount\":10,"
-        						+ "\"effectiveDate\":\"1970-01-01T00:25:00.000+00:00\"}]",
+        Assert.assertEquals("[{\"transactionId\":\"4028808f73ea5a160173ea5a53fd0001\",\"amount\":10,"
+        						+ "\"effectiveDate\":\"1970-01-01T00:25:00.000+00:00\",\"transactionType\":\"credit\"}]",
         		response);
     }
  
@@ -100,10 +102,10 @@ public class TransactionRestControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn().getResponse().getContentAsString();
  
-        Assert.assertEquals("[{\"transactionId\":\"4028808f73ea5a160173ea5a53fd0001\",\"transactionType\":\"credit\",\"amount\":10,"
-        					+ "\"effectiveDate\":\"1970-01-01T00:25:00.000+00:00\"},"
-        					+ "{\"transactionId\":\"4028808f73ea5a160173ea5a53fd0002\",\"transactionType\":\"debit\",\"amount\":11,"
-        					+ "\"effectiveDate\":\"1970-01-01T04:10:00.000+00:00\"}]", 
+        Assert.assertEquals("[{\"transactionId\":\"4028808f73ea5a160173ea5a53fd0001\",\"amount\":10,"
+        					+ "\"effectiveDate\":\"1970-01-01T00:25:00.000+00:00\",\"transactionType\":\"credit\"},"
+        					+ "{\"transactionId\":\"4028808f73ea5a160173ea5a53fd0002\",\"amount\":11,"
+        					+ "\"effectiveDate\":\"1970-01-01T04:10:00.000+00:00\",\"transactionType\":\"debit\"}]", 
         					response);
     }
  
@@ -114,8 +116,8 @@ public class TransactionRestControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn().getResponse().getContentAsString();
  
-        Assert.assertEquals("{\"transactionId\":\"4028808f73ea5a160173ea5a53fd0001\",\"transactionType\":\"credit\",\"amount\":10,"
-        		+ "\"effectiveDate\":\"1970-01-01T00:25:00.000+00:00\"}", response);
+        Assert.assertEquals("{\"transactionId\":\"4028808f73ea5a160173ea5a53fd0001\",\"amount\":10,"
+        		+ "\"effectiveDate\":\"1970-01-01T00:25:00.000+00:00\",\"transactionType\":\"credit\"}", response);
     }
     
     @Test

@@ -6,6 +6,7 @@ import java.util.Date;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.agile.engine.cuffaro.dto.operations.TransactionDebitDTO;
 import com.agile.engine.cuffaro.enums.TransactionTypeEnum;
 import com.agile.engine.cuffaro.model.TransactionItem;
 
@@ -13,8 +14,8 @@ public class TransactionDTOTest {
 
 	@Test
 	public void test_equals() {
-		TransactionDTO transactionDTO1 = new TransactionDTO(new TransactionItem());
-		TransactionDTO transactionDTO2 = new TransactionDTO(new TransactionItem());
+		TransactionDTO transactionDTO1 = new TransactionDebitDTO();
+		TransactionDTO transactionDTO2 = new TransactionDebitDTO();
 		
 		Assert.assertEquals(transactionDTO1, transactionDTO1);
 		Assert.assertNotEquals(transactionDTO1,null);
@@ -26,12 +27,6 @@ public class TransactionDTOTest {
 		Assert.assertNotEquals(transactionDTO2, transactionDTO1);
 		Assert.assertNotEquals(transactionDTO1, transactionDTO2);
 		transactionDTO2.setTransactionId("1234567890");
-		Assert.assertEquals(transactionDTO2, transactionDTO1);
-		Assert.assertEquals(transactionDTO1, transactionDTO2);
-		transactionDTO1.setTransactionType(TransactionTypeEnum.credit);
-		Assert.assertNotEquals(transactionDTO2, transactionDTO1);
-		Assert.assertNotEquals(transactionDTO1, transactionDTO2);
-		transactionDTO2.setTransactionType(TransactionTypeEnum.credit);
 		Assert.assertEquals(transactionDTO2, transactionDTO1);
 		Assert.assertEquals(transactionDTO1, transactionDTO2);
 		transactionDTO1.setAmount(new BigDecimal(10));

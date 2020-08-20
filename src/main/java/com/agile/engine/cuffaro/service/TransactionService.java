@@ -17,12 +17,15 @@ import com.agile.engine.cuffaro.dao.IAccountBalanceDAO;
 import com.agile.engine.cuffaro.dao.ITransactionDAO;
 import com.agile.engine.cuffaro.dto.TransactionDTO;
 import com.agile.engine.cuffaro.dto.TransactionRequestDTO;
+import com.agile.engine.cuffaro.dto.operations.TransactionCreditDTO;
+import com.agile.engine.cuffaro.dto.operations.TransactionDebitDTO;
 import com.agile.engine.cuffaro.enums.TransactionTypeEnum;
 import com.agile.engine.cuffaro.exceptions.InvalidArgumentException;
 import com.agile.engine.cuffaro.exceptions.InvalidOperationException;
 import com.agile.engine.cuffaro.exceptions.TransactionNotFoundException;
 import com.agile.engine.cuffaro.model.AccountBalance;
 import com.agile.engine.cuffaro.model.TransactionItem;
+import com.agile.engine.cuffaro.model.strategies.TransactionFactory;
 
 /**
  * Transaction Service
@@ -46,14 +49,15 @@ public class TransactionService implements ITransactionService {
 	
 	/**
 	 * Retrieves all the transaction history.
+	 * @throws InvalidArgumentException 
 	 */
 	@Override
-	public List<TransactionDTO> getTransactionHistory() {
+	public List<TransactionDTO> getTransactionHistory() throws InvalidArgumentException {
 		logger.debug("Retrieving transaction history");
 		List<TransactionItem> items = transactionDAO.findAll();
 		List<TransactionDTO> transactionDTOList = new ArrayList<>();
 		for (TransactionItem item : items) {
-			transactionDTOList.add(new TransactionDTO(item));
+			transactionDTOList.add(TransactionFactory.createTransactionDTO(item));
 		}
 		return transactionDTOList;
 	}
@@ -68,7 +72,7 @@ public class TransactionService implements ITransactionService {
 		
 		Optional<TransactionItem> item = transactionDAO.findById(transactionId);
 		if(item.isPresent()) {
-			return new TransactionDTO(item.get());
+			return TransactionFactory.createTransactionDTO(item.get());
 		} else {
 			throw new TransactionNotFoundException("Transaction not found - TransactionId: " + transactionId);
 		}
@@ -83,10 +87,11 @@ public class TransactionService implements ITransactionService {
 
 	/**
 	 * Creates a new transaction and updates the account balance.
+	 * @throws InvalidArgumentException 
 	 */
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
-	public synchronized TransactionDTO createTransaction(TransactionRequestDTO transactionRequestDTO) throws InvalidOperationException {
+	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE, rollbackFor = InvalidOperationException.class)
+	public synchronized TransactionDTO createTransaction(TransactionRequestDTO transactionRequestDTO) throws InvalidOperationException, InvalidArgumentException {
 		logger.debug("Processing transaction request");
 		AccountBalance balance;
 		Optional<AccountBalance> optionalBalance = accountBalanceDAO.findById(1L);
@@ -95,21 +100,23 @@ public class TransactionService implements ITransactionService {
 			balance = optionalBalance.get();
 		}else {
 			balance = new AccountBalance(1L, new BigDecimal(0));
-			
 		}
-		if(TransactionTypeEnum.debit.equals(transactionRequestDTO.getType())) {
-			balance.reduceAmount(transactionRequestDTO.getAmount());
-			if(balance.getAmount().compareTo(new BigDecimal(0)) == -1) {
+		
+		TransactionDTO transactionDTO = TransactionFactory.createTransactionDTO(transactionRequestDTO.getType(), transactionRequestDTO.getAmount());
+		balance.setAmount(transactionDTO.doOperation(balance.getAmount()));
+		
+		if(balance.getAmount().compareTo(new BigDecimal(0)) < 0) {
 				throw new InvalidOperationException("Operation result is negative. - Operation: " + transactionRequestDTO.getType() 
 					+ " amount: " + transactionRequestDTO.getAmount());
-			}
-		}else {
-			balance.increaseAmount(transactionRequestDTO.getAmount());
 		}
+	
 		TransactionItem item = transactionDAO.save(transactionRequestDTO.toTransaction());
 		balance.setEffectiveDate(item.getEffectiveDate());
 		accountBalanceDAO.save(balance);
-		return new TransactionDTO(item);
+		
+		transactionDTO.setEffectiveDate(item.getEffectiveDate());
+		transactionDTO.setTransactionId(item.getTransactionId());
+		return transactionDTO;
 	}
 
 }

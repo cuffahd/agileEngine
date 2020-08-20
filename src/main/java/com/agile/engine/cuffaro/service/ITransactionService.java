@@ -10,9 +10,9 @@ import com.agile.engine.cuffaro.exceptions.TransactionNotFoundException;
 
 public interface ITransactionService {
 
-	public List<TransactionDTO> getTransactionHistory();
+	public List<TransactionDTO> getTransactionHistory() throws InvalidArgumentException;
 
 	public TransactionDTO getTransaction(String transactionId) throws InvalidArgumentException, TransactionNotFoundException;
 	
-	public TransactionDTO createTransaction(TransactionRequestDTO transactionRequestDTO) throws InvalidOperationException;
+	public TransactionDTO createTransaction(TransactionRequestDTO transactionRequestDTO) throws InvalidOperationException, InvalidArgumentException;
 }
