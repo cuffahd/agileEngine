@@ -23,7 +23,11 @@ public class AccountBalanceRestController {
 	private static final Logger logger = LogManager.getLogger(AccountBalanceRestController.class);
 	
 	@Autowired
-	private IAccountBalanceService accountBalanceService;
+	public AccountBalanceRestController(IAccountBalanceService accountBalanceService) {
+		this.accountBalanceService = accountBalanceService;
+	}
+	
+	private final IAccountBalanceService accountBalanceService;
 	
 	/**
 	 * Method that search the Account Balance.

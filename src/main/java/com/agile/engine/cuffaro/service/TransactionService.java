@@ -35,10 +35,14 @@ public class TransactionService implements ITransactionService {
 	private static final Logger logger = LogManager.getLogger(TransactionService.class);
 	
 	@Autowired
-	private ITransactionDAO transactionDAO;
+	public TransactionService(ITransactionDAO transactionDAO, IAccountBalanceDAO accountBalanceDAO) {
+		this.transactionDAO = transactionDAO;
+		this.accountBalanceDAO = accountBalanceDAO;
+	}
 	
-	@Autowired
-	private IAccountBalanceDAO accountBalanceDAO;
+	private final ITransactionDAO transactionDAO;
+	
+	private final IAccountBalanceDAO accountBalanceDAO;
 	
 	/**
 	 * Retrieves all the transaction history.

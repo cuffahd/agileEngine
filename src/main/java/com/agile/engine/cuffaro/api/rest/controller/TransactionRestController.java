@@ -32,7 +32,10 @@ public class TransactionRestController {
 	private static final Logger logger = LogManager.getLogger(TransactionRestController.class);
 	
 	@Autowired
-	private ITransactionService transactionService;
+	public TransactionRestController(ITransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
+	private final ITransactionService transactionService;
 	
 	/**
 	 * Retrieves a list with all the transactions stored.

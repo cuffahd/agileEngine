@@ -18,7 +18,11 @@ import com.agile.engine.cuffaro.model.AccountBalance;
 public class AccountBalanceService implements IAccountBalanceService{
 
 	@Autowired
-	private IAccountBalanceDAO accountBalanceDAO;
+	public AccountBalanceService(IAccountBalanceDAO accountBalanceDAO) {
+		this.accountBalanceDAO = accountBalanceDAO;
+	}
+	
+	private final IAccountBalanceDAO accountBalanceDAO;
 	
 	/**
 	 * Retrieves the account balance.
