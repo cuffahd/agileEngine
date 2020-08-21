@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -83,6 +84,8 @@ public class TransactionRestController {
 			return ResponseEntity.status(422).body("invalid input");
 		} catch (InvalidArgumentException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: Invalid operation type.");
+		} catch (ObjectOptimisticLockingFailureException e) {
+			return createTransaction(transactionRequest); 
 		}
 	}
 	
