@@ -85,6 +85,7 @@ public class TransactionRestController {
 		} catch (InvalidArgumentException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: Invalid operation type.");
 		} catch (ObjectOptimisticLockingFailureException e) {
+			logger.info("Retrying");
 			return createTransaction(transactionRequest); 
 		}
 	}
