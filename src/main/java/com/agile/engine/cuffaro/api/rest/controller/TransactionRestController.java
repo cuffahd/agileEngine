@@ -3,6 +3,7 @@ package com.agile.engine.cuffaro.api.rest.controller;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,12 @@ public class TransactionRestController {
 	public ResponseEntity<Object> getTransactionHistory(){
 		logger.info("Transaction history requested.");
 		try {
-			return ResponseEntity.ok(transactionService.getTransactionHistory());
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.set("Access-Control-Allow-Origin", "*");
+
+			return ResponseEntity.ok()
+					.headers(responseHeaders)
+					.body(transactionService.getTransactionHistory());
 		} catch (InvalidArgumentException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: Invalid operation type.");
 		}

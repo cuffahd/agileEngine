@@ -32,7 +32,7 @@ public class AccountBalance implements Serializable{
 	private Long accountId = 1L; 
 	//TODO: If we will manage more accounts, remove this hardcoded value.
 	
-	@Column(nullable = false, precision = 10, scale = 8)
+	@Column(nullable = false)
 	private BigDecimal amount;
 	
 	/**

@@ -53,7 +53,7 @@ public class TransactionItem implements Serializable{
 	/**
 	 * Transaction numeric value. Incrementing or decrementing the account balance, based on the transaction type.
 	 */
-	@Column(nullable = false, precision = 10, scale = 8)
+	@Column(nullable = false)
 	private BigDecimal amount;
 	
 	/**

@@ -101,11 +101,11 @@ public class TransactionService implements ITransactionService {
 			balance = new AccountBalance(1L, new BigDecimal(0));
 		}
 		
-		TransactionDTO transactionDTO = TransactionFactory.createTransactionDTO(transactionRequestDTO.getType(), transactionRequestDTO.getAmount());
+		TransactionDTO transactionDTO = TransactionFactory.createTransactionDTO(transactionRequestDTO.getTransactionType(), transactionRequestDTO.getAmount());
 		balance.setAmount(transactionDTO.doOperation(balance.getAmount()));
 		
 		if(balance.getAmount().compareTo(new BigDecimal(0)) < 0) {
-				throw new InvalidOperationException("Operation result is negative. - Operation: " + transactionRequestDTO.getType() 
+				throw new InvalidOperationException("Operation result is negative. - Operation: " + transactionRequestDTO.getTransactionType()
 					+ " amount: " + transactionRequestDTO.getAmount());
 		}
 	

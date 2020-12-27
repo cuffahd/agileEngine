@@ -13,23 +13,23 @@ public class TransactionRequestDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = -1582514313584568885L;
 	
-	private TransactionTypeEnum type;
+	private TransactionTypeEnum transactionType;
 	private BigDecimal amount;
 	
 	public TransactionRequestDTO() {
 		//Default constructor without parameters
 	}
 	
-	public TransactionRequestDTO(TransactionTypeEnum type, BigDecimal amount) {
-		this.type = type;
+	public TransactionRequestDTO(TransactionTypeEnum transactionType, BigDecimal amount) {
+		this.transactionType = transactionType;
 		this.amount = amount;
 	}
 	
-	public TransactionTypeEnum getType() {
-		return type;
+	public TransactionTypeEnum getTransactionType() {
+		return transactionType;
 	}
-	public void setType(TransactionTypeEnum type) {
-		this.type = type;
+	public void setTransactionType(TransactionTypeEnum transactionType) {
+		this.transactionType = transactionType;
 	}
 	public BigDecimal getAmount() {
 		return amount;
@@ -43,12 +43,12 @@ public class TransactionRequestDTO implements Serializable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((amount == null) ? 0 : amount.toString().hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((transactionType == null) ? 0 : transactionType.hashCode());
 		return result;
 	}
 
 	public TransactionItem toTransaction() {
-		return new TransactionItem(this.type, this.amount);
+		return new TransactionItem(this.transactionType, this.amount);
 	}
 	
 	@Override
@@ -70,7 +70,7 @@ public class TransactionRequestDTO implements Serializable{
 		} else if (!amount.equals(other.amount)) {
 			return false;
 		}
-		if (type != other.type) {
+		if (transactionType != other.transactionType) {
 			return false;
 		}
 		return true;
@@ -78,6 +78,6 @@ public class TransactionRequestDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return "TransactionRequestDTO [type=" + type + ", amount=" + amount + "]";
+		return "TransactionRequestDTO [type=" + transactionType + ", amount=" + amount + "]";
 	}
 }

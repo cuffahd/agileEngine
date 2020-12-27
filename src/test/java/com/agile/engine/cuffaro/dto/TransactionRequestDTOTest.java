@@ -20,10 +20,10 @@ public class TransactionRequestDTOTest {
 		Assert.assertNotEquals(transactionDTO1, 1L);
 		Assert.assertEquals(transactionDTO1, transactionDTO2);
 		Assert.assertEquals(transactionDTO2, transactionDTO1);
-		transactionDTO1.setType(TransactionTypeEnum.credit);
+		transactionDTO1.setTransactionType(TransactionTypeEnum.credit);
 		Assert.assertNotEquals(transactionDTO2, transactionDTO1);
 		Assert.assertNotEquals(transactionDTO1, transactionDTO2);
-		transactionDTO2.setType(TransactionTypeEnum.credit);
+		transactionDTO2.setTransactionType(TransactionTypeEnum.credit);
 		Assert.assertEquals(transactionDTO2, transactionDTO1);
 		Assert.assertEquals(transactionDTO1, transactionDTO2);
 		transactionDTO1.setAmount(new BigDecimal(10));

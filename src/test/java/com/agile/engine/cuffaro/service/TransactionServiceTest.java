@@ -99,7 +99,7 @@ public class TransactionServiceTest {
 		
 		TransactionRequestDTO dto = new TransactionRequestDTO();
 		dto.setAmount(new BigDecimal(10));
-		dto.setType(TransactionTypeEnum.debit);
+		dto.setTransactionType(TransactionTypeEnum.debit);
 				
 		transactionService.createTransaction(dto);
 		Assert.fail();
@@ -114,7 +114,7 @@ public class TransactionServiceTest {
 		
 		TransactionRequestDTO dto = new TransactionRequestDTO();
 		dto.setAmount(new BigDecimal(10));
-		dto.setType(TransactionTypeEnum.debit);
+		dto.setTransactionType(TransactionTypeEnum.debit);
 
 		TransactionItem item = new TransactionItem();
 		Mockito.when(accountBalanceDAO.findById(Mockito.anyLong())).thenReturn(Optional.of(balance));
